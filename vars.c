@@ -1,46 +1,46 @@
 #include "shell.h"
 
 /**
- * is_chain - Test current char in buffer is a chain delimeter
+ * is_chain - Test if current char in buffer is a chain delimeter
  * @info: Parameter struct
  * @buf: Char buffer
- * @p: current positions address in buf
- * Return: 1 if chain delimeter, otherwise 0
+ * @p: Address of current position in buf
+ * Return: 1 if chain delimeter, 0 otherwise
  */
 int is_chain(info_t *info, char *buf, size_t *p)
 {
-	size_t i = *p;
+	size_t j = *p;
 
-	if (buf[i] == '|' && buf[i + 1] == '|')
+	if (buf[j] == '|' && buf[j + 1] == '|')
 	{
-		buf[i] = 0;
-		i++;
+		buf[j] = 0;
+		j++;
 		info->cmd_buf_type = CMD_OR;
 	}
-	else if (buf[i] == '&' && buf[i + 1] == '&')
+	else if (buf[j] == '&' && buf[j + 1] == '&')
 	{
-		buf[i] = 0;
-		i++;
+		buf[j] = 0;
+		j++;
 		info->cmd_buf_type = CMD_AND;
 	}
-	else if (buf[i] == ';') /* found end of this command */
+	else if (buf[j] == ';') /* found end of this command */
 	{
-		buf[i] = 0; /* replace semicolon with null */
+		buf[j] = 0; /* replace semicolon with null */
 		info->cmd_buf_type = CMD_CHAIN;
 	}
 	else
 		return (0);
-	*p = i;
+	*p = j;
 	return (1);
 }
 
 /**
- * check_chain - Checks we should continue doing based on last status
+ * check_chain - Checks we should continue chaining based on last status
  * @info: Parameter struct
  * @buf: Char buffer
- * @p: current positions address in buf
- * @i: buf starting position
- * @len: buf length
+ * @p: Address of current position in buf
+ * @i: Starting position in buf
+ * @len: Length of buf
  * Return: Void
  */
 void check_chain(info_t *info, char *buf, size_t *p, size_t i, size_t len)
@@ -68,9 +68,9 @@ void check_chain(info_t *info, char *buf, size_t *p, size_t i, size_t len)
 }
 
 /**
- * replace_alias - Replaces aliases in tokenized string
+ * replace_alias - Replaces aliases in  tokenized string
  * @info: Parameter struct
- * Return: if replaced then 1, otherwise 0
+ * Return: 1 if replaced, 0 otherwise
  */
 int replace_alias(info_t *info)
 {
@@ -98,7 +98,7 @@ int replace_alias(info_t *info)
 /**
  * replace_vars - Replaces vars in tokenized string
  * @info: Parameter struct
- * Return: if replaced then 1, otherwise 0
+ * Return: 1 if replaced, 0 otherwise
  */
 int replace_vars(info_t *info)
 {
@@ -113,20 +113,20 @@ int replace_vars(info_t *info)
 		if (!_strcmp(info->argv[i], "$?"))
 		{
 			replace_string(&(info->argv[i]),
-				_strdup(convert_number(info->status, 10, 0)));
+					_strdup(convert_number(info->status, 10, 0)));
 			continue;
 		}
 		if (!_strcmp(info->argv[i], "$$"))
 		{
 			replace_string(&(info->argv[i]),
-				_strdup(convert_number(getpid(), 10, 0)));
+					_strdup(convert_number(getpid(), 10, 0)));
 			continue;
 		}
 		node = node_starts_with(info->env, &info->argv[i][1], '=');
 		if (node)
 		{
 			replace_string(&(info->argv[i]),
-				_strdup(_strchr(node->str, '=') + 1));
+					_strdup(_strchr(node->str, '=') + 1));
 			continue;
 		}
 		replace_string(&info->argv[i], _strdup(""));
@@ -138,8 +138,8 @@ int replace_vars(info_t *info)
 /**
  * replace_string - Replaces string
  * @old: Address of old string
- * @new: new string
- * Return: if replaced then 1, otherwise 0
+ * @new: New string
+ * Return: 1 if replaced, 0 otherwise
  */
 int replace_string(char **old, char *new)
 {
@@ -147,3 +147,4 @@ int replace_string(char **old, char *new)
 	*old = new;
 	return (1);
 }
+

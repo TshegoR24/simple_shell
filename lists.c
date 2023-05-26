@@ -1,7 +1,7 @@
 #include "shell.h"
 
 /**
- * add_node - Adds node to start of the list
+ * add_node - Adds node to start list
  * @head: Address of pointer to head node
  * @str: Str field of node
  * @num: Node index used by history
@@ -33,8 +33,8 @@ list_t *add_node(list_t **head, const char *str, int num)
 }
 
 /**
- * add_node_end - Adds node to end of the list
- * @head: Address of pointer to head node
+ * add_node_end - Adds a node to end the list
+ * @head: address of pointer to head node
  * @str: Str field of node
  * @num: Node index used by history
  * Return: size of list
@@ -79,28 +79,28 @@ list_t *add_node_end(list_t **head, const char *str, int num)
  */
 size_t print_list_str(const list_t *h)
 {
-	size_t a = 0;
+	size_t i = 0;
 
 	while (h)
 	{
 		_puts(h->str ? h->str : "(nil)");
 		_puts("\n");
 		h = h->next;
-		a++;
+		i++;
 	}
-	return (a);
+	return (i);
 }
 
 /**
- * delete_node_at_index - Deletes node at proposed index
- * @head: Address pointer to first node
- * @index: Index of node to delete
+ * delete_node_at_index - Deletes node at given index
+ * @head: Address of pointer to first node
+ * @index: index of node to delete
  * Return: Success on 1, failure on 0
  */
 int delete_node_at_index(list_t **head, unsigned int index)
 {
 	list_t *node, *prev_node;
-	unsigned int a = 0;
+	unsigned int i = 0;
 
 	if (!head || !*head)
 		return (0);
@@ -116,14 +116,14 @@ int delete_node_at_index(list_t **head, unsigned int index)
 	node = *head;
 	while (node)
 	{
-		if (a == index)
+		if (i == index)
 		{
 			prev_node->next = node->next;
 			free(node->str);
 			free(node);
 			return (1);
 		}
-		a++;
+		i++;
 		prev_node = node;
 		node = node->next;
 	}
@@ -132,7 +132,7 @@ int delete_node_at_index(list_t **head, unsigned int index)
 
 /**
  * free_list - Frees all nodes of list
- * @head_ptr: Address pointer to head node
+ * @head_ptr: Address of pointer to head node
  * Return: void
  */
 void free_list(list_t **head_ptr)

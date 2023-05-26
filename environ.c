@@ -1,7 +1,7 @@
 #include "shell.h"
 
 /**
- * _myenv - Prints the current environment
+ * _myenv - Prints current environment
  * @info: Structure with potential arguments to maintain
  * constant function prototype.
  * Return: 0 Always
@@ -13,21 +13,21 @@ int _myenv(info_t *info)
 }
 
 /**
- * _getenv - Gets value of environ variable
+ * _getenv - Gets value of  environ variable
  * @info: Structure with potential arguments to maintain
  * @name: env var name
- * Return: the value
+ * Return: The value
  */
 char *_getenv(info_t *info, const char *name)
 {
 	list_t *node = info->env;
-	char *s;
+	char *p;
 
 	while (node)
 	{
-		s = starts_with(node->str, name);
-		if (s && *s)
-			return (s);
+		p = starts_with(node->str, name);
+		if (p && *p)
+			return (p);
 		node = node->next;
 	}
 	return (NULL);
@@ -35,9 +35,9 @@ char *_getenv(info_t *info, const char *name)
 
 /**
  * _mysetenv - Initialize new environment variable,
- *             or modify existing one
+ *              modify current one
  * @info: Structure with potential arguments to maintain
- * constant function prototype.
+ *  constant function prototype.
  *  Return: 0 Always
  */
 int _mysetenv(info_t *info)
@@ -55,20 +55,20 @@ int _mysetenv(info_t *info)
 /**
  * _myunsetenv - Remove environment variable
  * @info: Structure with potential arguments to maintain
- *  constant function prototype.
- *  Return: 0 Always
+ * constant function prototype.
+ * Return: 0 Always
  */
 int _myunsetenv(info_t *info)
 {
-	int p;
+	int i;
 
 	if (info->argc == 1)
 	{
 		_eputs("Too few arguements.\n");
 		return (1);
 	}
-	for (p = 1; p <= info->argc; p++)
-		_unsetenv(info, info->argv[p]);
+	for (i = 1; i <= info->argc; i++)
+		_unsetenv(info, info->argv[i]);
 
 	return (0);
 }
@@ -82,10 +82,11 @@ int _myunsetenv(info_t *info)
 int populate_env_list(info_t *info)
 {
 	list_t *node = NULL;
-	size_t p;
+	size_t i;
 
-	for (p = 0; environ[p]; p++)
-		add_node_end(&node, environ[p], 0);
+	for (i = 0; environ[i]; i++)
+		add_node_end(&node, environ[i], 0);
 	info->env = node;
 	return (0);
 }
+

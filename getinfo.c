@@ -19,7 +19,7 @@ void clear_info(info_t *info)
  */
 void set_info(info_t *info, char **av)
 {
-	int a = 0;
+	int i = 0;
 
 	info->fname = av[0];
 	if (info->arg)
@@ -27,7 +27,6 @@ void set_info(info_t *info, char **av)
 		info->argv = strtow(info->arg, " \t");
 		if (!info->argv)
 		{
-
 			info->argv = malloc(sizeof(char *) * 2);
 			if (info->argv)
 			{
@@ -35,9 +34,9 @@ void set_info(info_t *info, char **av)
 				info->argv[1] = NULL;
 			}
 		}
-		for (a = 0; info->argv && info->argv[a]; a++)
+		for (i = 0; info->argv && info->argv[i]; i++)
 			;
-		info->argc = a;
+		info->argc = i;
 
 		replace_alias(info);
 		replace_vars(info);
@@ -47,7 +46,7 @@ void set_info(info_t *info, char **av)
 /**
  * free_info - Frees info_t struct fields
  * @info: Struct address
- * @all: If freeing all fields, true
+ * @all: True if freeing all fields
  */
 void free_info(info_t *info, int all)
 {
@@ -72,3 +71,4 @@ void free_info(info_t *info, int all)
 		_putchar(BUF_FLUSH);
 	}
 }
+

@@ -4,7 +4,7 @@
  * hsh - Main shell loop
  * @info: Parameter & return info struct
  * @av: Argument vector from main()
- * Return: Success on 0, error on 1, or code error
+ * Return: 0 on success, 1 on error, or error code
  */
 int hsh(info_t *info, char **av)
 {
@@ -44,15 +44,15 @@ int hsh(info_t *info, char **av)
 
 /**
  * find_builtin - Finds builtin command
- * @info: Parameter and return info struct
+ * @info: Parameter & return info struct
  * Return: -1 if builtin not found,
- *		        if builtin executed successfully then 0
- *			if builtin found but not successful then 1
- *			if builtin signals exit() then -2
+ * 0 if builtin executed successfully,
+ * 1 if builtin found but not successful,
+ * 2 if builtin signals exit()
  */
 int find_builtin(info_t *info)
 {
-	int a, built_in_ret = -1;
+	int i, built_in_ret = -1;
 	builtin_table builtintbl[] = {
 		{"exit", _myexit},
 		{"env", _myenv},
@@ -65,25 +65,25 @@ int find_builtin(info_t *info)
 		{NULL, NULL}
 	};
 
-	for (a = 0; builtintbl[a].type; a++)
-		if (_strcmp(info->argv[0], builtintbl[a].type) == 0)
+	for (i = 0; builtintbl[i].type; i++)
+		if (_strcmp(info->argv[0], builtintbl[i].type) == 0)
 		{
 			info->line_count++;
-			built_in_ret = builtintbl[a].func(info);
+			built_in_ret = builtintbl[i].func(info);
 			break;
 		}
 	return (built_in_ret);
 }
 
 /**
- * find_cmd - Finds command in PATH
- * @info: Parameter and return info struct
+ * find_cmd - Finds a command in PATH
+ * @info: Parameter & return info struct
  * Return: void
  */
 void find_cmd(info_t *info)
 {
 	char *path = NULL;
-	int a, k;
+	int i, k;
 
 	info->path = info->argv[0];
 	if (info->linecount_flag == 1)
@@ -91,8 +91,8 @@ void find_cmd(info_t *info)
 		info->line_count++;
 		info->linecount_flag = 0;
 	}
-	for (a = 0, k = 0; info->arg[a]; a++)
-		if (!is_delim(info->arg[a], " \t\n"))
+	for (i = 0, k = 0; info->arg[i]; i++)
+		if (!is_delim(info->arg[i], " \t\n"))
 			k++;
 	if (!k)
 		return;
@@ -106,7 +106,7 @@ void find_cmd(info_t *info)
 	else
 	{
 		if ((interactive(info) || _getenv(info, "PATH=")
-			|| info->argv[0][0] == '/') && is_cmd(info, info->argv[0]))
+					|| info->argv[0][0] == '/') && is_cmd(info, info->argv[0]))
 			fork_cmd(info);
 		else if (*(info->arg) != '\n')
 		{
@@ -118,7 +118,7 @@ void find_cmd(info_t *info)
 
 /**
  * fork_cmd - Forks an exec thread to run cmd
- * @info: Parameter and return info struct
+ * @info: Parameter & return info struct
  * Return: void
  */
 void fork_cmd(info_t *info)
@@ -154,3 +154,4 @@ void fork_cmd(info_t *info)
 		}
 	}
 }
+
